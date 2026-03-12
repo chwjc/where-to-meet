@@ -1,8 +1,8 @@
 <template>
-  <view class="page">
-    <view v-if="places.length > 0" class="result-list">
-      <view class="result-header">
-        <text class="result-title">为你推荐 {{ places.length }} 个地点</text>
+  <view class="min-h-screen bg-page-bg p-[24rpx]">
+    <view v-if="places.length > 0">
+      <view class="mb-[20rpx]">
+        <text class="text-[30rpx] font-semibold text-[#333]">为你推荐 {{ places.length }} 个地点</text>
       </view>
       <PlaceCard
         v-for="(place, index) in places"
@@ -13,9 +13,9 @@
       />
     </view>
 
-    <view v-else class="empty">
-      <text class="empty-text">暂无推荐结果</text>
-      <button class="back-btn" @tap="goBack">返回重试</button>
+    <view v-else class="flex flex-col items-center justify-center pt-[200rpx]">
+      <text class="text-[30rpx] text-[#999] mb-[32rpx]">暂无推荐结果</text>
+      <button class="bg-primary text-white text-[28rpx] px-[48rpx] py-[16rpx] rounded-[12rpx] border-none" @tap="goBack">返回重试</button>
     </view>
   </view>
 </template>
@@ -51,48 +51,3 @@ function goBack() {
   uni.navigateBack()
 }
 </script>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  background: #f5f6fa;
-  padding: 24rpx;
-}
-
-.result-header {
-  margin-bottom: 20rpx;
-}
-
-.result-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #333333;
-}
-
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 200rpx;
-}
-
-.empty-text {
-  font-size: 30rpx;
-  color: #999999;
-  margin-bottom: 32rpx;
-}
-
-.back-btn {
-  background: #4a90d9;
-  color: #ffffff;
-  font-size: 28rpx;
-  padding: 16rpx 48rpx;
-  border-radius: 12rpx;
-  border: none;
-}
-
-.back-btn::after {
-  border: none;
-}
-</style>

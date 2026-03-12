@@ -1,24 +1,24 @@
 <template>
-  <view class="page">
-    <view class="header">
-      <text class="header-title">去哪儿聚</text>
-      <text class="header-subtitle">找到大家都方便的聚会地点</text>
+  <view class="min-h-screen bg-page-bg">
+    <view class="bg-primary px-[32rpx] pt-[40rpx] pb-[48rpx]">
+      <text class="text-[44rpx] font-bold text-white block">不远不近</text>
+      <text class="text-[26rpx] text-white/80 mt-[8rpx] block">不远不近，刚刚好</text>
     </view>
 
-    <view class="content">
+    <view class="px-[24rpx] -mt-[20rpx]">
       <LocationInput @update="onLocationsUpdate" />
       <CategorySelector @select="onCategorySelect" />
 
-      <view class="action-area">
+      <view class="mt-[16rpx] flex flex-col items-center">
         <button
-          class="recommend-btn"
-          :class="{ disabled: !canRecommend }"
+          class="w-full h-[88rpx] text-white text-[32rpx] font-semibold rounded-[16rpx] flex items-center justify-center border-none"
+          :class="canRecommend ? 'bg-primary' : 'bg-[#cccccc]'"
           :disabled="!canRecommend"
           @tap="startRecommend"
         >
           {{ loading ? '正在搜索...' : '开始推荐' }}
         </button>
-        <text v-if="!canRecommend" class="action-hint">
+        <text v-if="!canRecommend" class="text-[24rpx] text-[#999] mt-[12rpx]">
           {{ getHintText() }}
         </text>
       </view>
@@ -78,6 +78,7 @@ async function startRecommend() {
       url: '/pages/result/result',
     })
   } catch (err: any) {
+    console.error('[startRecommend] 推荐失败:', err)
     uni.showToast({
       title: err.message || '搜索失败，请重试',
       icon: 'none',
@@ -87,69 +88,3 @@ async function startRecommend() {
   }
 }
 </script>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  background: #f5f6fa;
-}
-
-.header {
-  background: #4a90d9;
-  padding: 40rpx 32rpx 48rpx;
-}
-
-.header-title {
-  font-size: 44rpx;
-  font-weight: 700;
-  color: #ffffff;
-  display: block;
-}
-
-.header-subtitle {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
-  margin-top: 8rpx;
-  display: block;
-}
-
-.content {
-  padding: 24rpx;
-  margin-top: -20rpx;
-}
-
-.action-area {
-  margin-top: 16rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.recommend-btn {
-  width: 100%;
-  height: 88rpx;
-  background: #4a90d9;
-  color: #ffffff;
-  font-size: 32rpx;
-  font-weight: 600;
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-}
-
-.recommend-btn.disabled {
-  background: #cccccc;
-}
-
-.recommend-btn::after {
-  border: none;
-}
-
-.action-hint {
-  font-size: 24rpx;
-  color: #999999;
-  margin-top: 12rpx;
-}
-</style>

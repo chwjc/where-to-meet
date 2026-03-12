@@ -11,6 +11,9 @@ node_modules
 .DS_Store
 dist
 *.local
+llmdoc.md
+claude.md
+prd.md
 
 # Editor directories and files
 .idea
@@ -19,3 +22,4 @@ dist
 *.njsproj
 *.sln
 *.sw?
+*.pen

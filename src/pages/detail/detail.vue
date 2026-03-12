@@ -1,9 +1,9 @@
 <template>
-  <view class="page">
-    <view v-if="place" class="detail-content">
+  <view class="min-h-screen bg-page-bg">
+    <view v-if="place">
       <!-- 地图 -->
       <map
-        class="detail-map"
+        class="w-full h-[400rpx]"
         :latitude="place.lat"
         :longitude="place.lng"
         :markers="markers"
@@ -12,50 +12,53 @@
       />
 
       <!-- 地点信息 -->
-      <view class="info-card">
-        <text class="info-title">{{ place.title }}</text>
-        <text class="info-address">{{ place.address }}</text>
+      <view class="bg-white mx-[24rpx] my-[24rpx] rounded-[16rpx] p-[28rpx]">
+        <text class="text-[36rpx] font-bold text-[#333] block mb-[8rpx]">{{ place.title }}</text>
+        <text class="text-[26rpx] text-[#666] block mb-[20rpx]">{{ place.address }}</text>
 
-        <view v-if="place.category" class="info-row">
-          <text class="info-label">分类</text>
-          <text class="info-value">{{ place.category }}</text>
+        <view v-if="place.category" class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
+          <text class="text-[26rpx] text-[#999]">分类</text>
+          <text class="text-[26rpx] text-[#333]">{{ place.category }}</text>
         </view>
 
-        <view v-if="place.tel" class="info-row">
-          <text class="info-label">电话</text>
-          <text class="info-value tel" @tap="callPhone">{{ place.tel }}</text>
+        <view v-if="place.tel" class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
+          <text class="text-[26rpx] text-[#999]">电话</text>
+          <text class="text-[26rpx] text-primary" @tap="callPhone">{{ place.tel }}</text>
         </view>
 
-        <view class="info-row">
-          <text class="info-label">综合评分</text>
-          <text class="info-value score">{{ (place.score * 10).toFixed(1) }} 分</text>
+        <view class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
+          <text class="text-[26rpx] text-[#999]">综合评分</text>
+          <text class="text-[26rpx] text-accent font-semibold">{{ (place.score * 10).toFixed(1) }} 分</text>
         </view>
 
         <!-- 各人距离 -->
-        <view class="distances-section">
-          <text class="info-label">各人距离</text>
-          <view class="distances-list">
+        <view class="mt-[20rpx]">
+          <text class="text-[26rpx] text-[#999]">各人距离</text>
+          <view class="mt-[12rpx]">
             <view
               v-for="(d, i) in place.distances"
               :key="i"
-              class="distance-row"
+              class="flex items-center mb-[12rpx]"
             >
-              <text class="distance-person">人{{ i + 1 }}</text>
-              <view class="distance-bar-container">
+              <text class="text-[24rpx] text-[#666] w-[60rpx] shrink-0">人{{ i + 1 }}</text>
+              <view class="flex-1 h-[16rpx] bg-[#f0f0f0] rounded-[8rpx] mx-[16rpx] overflow-hidden">
                 <view
-                  class="distance-bar"
+                  class="h-full bg-primary rounded-[8rpx] min-w-[8rpx]"
                   :style="{ width: getBarWidth(d) + '%' }"
                 />
               </view>
-              <text class="distance-value">{{ formatDistance(d) }}</text>
+              <text class="text-[24rpx] text-[#333] w-[100rpx] text-right shrink-0">{{ formatDistance(d) }}</text>
             </view>
           </view>
         </view>
       </view>
 
       <!-- 操作按钮 -->
-      <view class="action-buttons">
-        <button class="nav-btn" @tap="openNavigation">导航前往</button>
+      <view class="px-[24rpx] pb-[48rpx]">
+        <button
+          class="w-full h-[88rpx] bg-primary text-white text-[32rpx] font-semibold rounded-[16rpx] flex items-center justify-center border-none"
+          @tap="openNavigation"
+        >导航前往</button>
       </view>
     </view>
   </view>
@@ -160,131 +163,3 @@ function callPhone() {
   })
 }
 </script>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  background: #f5f6fa;
-}
-
-.detail-map {
-  width: 100%;
-  height: 400rpx;
-}
-
-.info-card {
-  background: #ffffff;
-  margin: 24rpx;
-  border-radius: 16rpx;
-  padding: 28rpx;
-}
-
-.info-title {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #333333;
-  display: block;
-  margin-bottom: 8rpx;
-}
-
-.info-address {
-  font-size: 26rpx;
-  color: #666666;
-  display: block;
-  margin-bottom: 20rpx;
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.info-label {
-  font-size: 26rpx;
-  color: #999999;
-}
-
-.info-value {
-  font-size: 26rpx;
-  color: #333333;
-}
-
-.info-value.tel {
-  color: #4a90d9;
-}
-
-.info-value.score {
-  color: #f57c00;
-  font-weight: 600;
-}
-
-.distances-section {
-  margin-top: 20rpx;
-}
-
-.distances-list {
-  margin-top: 12rpx;
-}
-
-.distance-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12rpx;
-}
-
-.distance-person {
-  font-size: 24rpx;
-  color: #666666;
-  width: 60rpx;
-  flex-shrink: 0;
-}
-
-.distance-bar-container {
-  flex: 1;
-  height: 16rpx;
-  background: #f0f0f0;
-  border-radius: 8rpx;
-  margin: 0 16rpx;
-  overflow: hidden;
-}
-
-.distance-bar {
-  height: 100%;
-  background: #4a90d9;
-  border-radius: 8rpx;
-  min-width: 8rpx;
-}
-
-.distance-value {
-  font-size: 24rpx;
-  color: #333333;
-  width: 100rpx;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.action-buttons {
-  padding: 0 24rpx 48rpx;
-}
-
-.nav-btn {
-  width: 100%;
-  height: 88rpx;
-  background: #4a90d9;
-  color: #ffffff;
-  font-size: 32rpx;
-  font-weight: 600;
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-}
-
-.nav-btn::after {
-  border: none;
-}
-</style>

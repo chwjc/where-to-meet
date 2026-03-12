@@ -2,7 +2,23 @@ import type { Location, Place } from './types'
 
 // 腾讯地图 WebService API Key
 // TODO: 替换为你自己的 Key，申请地址：https://lbs.qq.com
-const MAP_KEY = 'YOUR_TENCENT_MAP_KEY'
+const MAP_KEY = 'MUJBZ-VBBLL-H7HP7-MBZAW-5KP3O-K5BL4'
+
+/** 根据腾讯地图 API status 返回友好错误文案 */
+function getApiErrorMessage(status: number, fallback: string): string {
+  switch (status) {
+    case 120:
+    case 121:
+      return '后台额度不足，请稍后再试'
+    case 110:
+    case 111:
+      return 'API Key 无效'
+    case 199:
+      return 'API Key 未开启 WebService 功能'
+    default:
+      return fallback
+  }
+}
 
 /** 腾讯地图搜索提示 API —— 用于地址搜索输入联想 */
 export function searchSuggestion(keyword: string, region = '北京'): Promise<any[]> {
@@ -19,10 +35,14 @@ export function searchSuggestion(keyword: string, region = '北京'): Promise<an
         if (res.data && res.data.status === 0) {
           resolve(res.data.data || [])
         } else {
-          reject(new Error(res.data?.message || '搜索失败'))
+          console.error('[searchSuggestion] API 错误:', res.data)
+          reject(new Error(getApiErrorMessage(res.data?.status, res.data?.message || '搜索失败')))
         }
       },
-      fail: reject,
+      fail: (err: any) => {
+        console.error('[searchSuggestion] 请求失败:', err)
+        reject(err)
+      },
     })
   })
 }
@@ -52,10 +72,14 @@ export function searchNearbyPOI(
         if (res.data && res.data.status === 0) {
           resolve(res.data.data || [])
         } else {
-          reject(new Error(res.data?.message || 'POI 搜索失败'))
+          console.error('[searchNearbyPOI] API 错误:', res.data)
+          reject(new Error(getApiErrorMessage(res.data?.status, res.data?.message || 'POI 搜索失败')))
         }
       },
-      fail: reject,
+      fail: (err: any) => {
+        console.error('[searchNearbyPOI] 请求失败:', err)
+        reject(err)
+      },
     })
   })
 }
@@ -74,10 +98,14 @@ export function reverseGeocode(lat: number, lng: number): Promise<any> {
         if (res.data && res.data.status === 0) {
           resolve(res.data.result)
         } else {
-          reject(new Error(res.data?.message || '逆地理编码失败'))
+          console.error('[reverseGeocode] API 错误:', res.data)
+          reject(new Error(getApiErrorMessage(res.data?.status, res.data?.message || '逆地理编码失败')))
         }
       },
-      fail: reject,
+      fail: (err: any) => {
+        console.error('[reverseGeocode] 请求失败:', err)
+        reject(err)
+      },
     })
   })
 }

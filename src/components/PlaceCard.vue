@@ -1,34 +1,34 @@
 <template>
-  <view class="place-card" @tap="$emit('tap')">
-    <view class="card-header">
-      <view class="card-title-row">
-        <text class="card-rank">{{ rank }}</text>
-        <text class="card-title">{{ place.title }}</text>
+  <view class="bg-white rounded-[16rpx] p-[24rpx] mb-[20rpx] shadow-sm" @tap="$emit('tap')">
+    <view class="flex justify-between items-start mb-[12rpx]">
+      <view class="flex items-center flex-1 overflow-hidden">
+        <text class="text-[28rpx] font-bold text-primary mr-[12rpx] shrink-0">{{ rank }}</text>
+        <text class="text-[30rpx] font-semibold text-[#333] truncate">{{ place.title }}</text>
       </view>
-      <view class="card-score">
-        <text class="score-value">{{ (place.score * 10).toFixed(1) }}</text>
-        <text class="score-label">分</text>
+      <view class="flex items-baseline shrink-0 ml-[16rpx] bg-[#fff3e0] rounded-[8rpx] px-[12rpx] py-[6rpx]">
+        <text class="text-[32rpx] font-bold text-accent">{{ (place.score * 10).toFixed(1) }}</text>
+        <text class="text-[20rpx] text-accent ml-[4rpx]">分</text>
       </view>
     </view>
 
-    <view class="card-info">
-      <text class="card-address">{{ place.address }}</text>
-      <view class="card-tags">
-        <text class="tag distance-tag">
+    <view class="mb-[12rpx]">
+      <text class="text-[24rpx] text-[#666] block mb-[10rpx] truncate">{{ place.address }}</text>
+      <view class="flex flex-wrap gap-[8rpx]">
+        <text class="text-[22rpx] px-[12rpx] py-[4rpx] rounded-[6rpx] bg-[#e8f0fe] text-primary">
           平均 {{ formatDistance(place.avgDistance) }}
         </text>
-        <text v-if="place.category" class="tag category-tag">
+        <text v-if="place.category" class="text-[22rpx] px-[12rpx] py-[4rpx] rounded-[6rpx] bg-[#f0f0f0] text-[#666]">
           {{ place.category }}
         </text>
       </view>
     </view>
 
     <!-- 各人距离详情 -->
-    <view v-if="place.distances.length > 0" class="card-distances">
+    <view v-if="place.distances.length > 0" class="flex flex-wrap gap-[16rpx] pt-[12rpx] border-t border-[#f0f0f0]">
       <text
         v-for="(d, i) in place.distances"
         :key="i"
-        class="distance-item"
+        class="text-[22rpx] text-[#999]"
       >
         人{{ i + 1 }}：{{ formatDistance(d) }}
       </text>
@@ -55,115 +55,3 @@ function formatDistance(meters: number): string {
   return `${(meters / 1000).toFixed(1)}km`
 }
 </script>
-
-<style scoped>
-.place-card {
-  background: #ffffff;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12rpx;
-}
-
-.card-title-row {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  overflow: hidden;
-}
-
-.card-rank {
-  font-size: 28rpx;
-  font-weight: 700;
-  color: #4a90d9;
-  margin-right: 12rpx;
-  flex-shrink: 0;
-}
-
-.card-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #333333;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.card-score {
-  display: flex;
-  align-items: baseline;
-  flex-shrink: 0;
-  margin-left: 16rpx;
-  background: #fff3e0;
-  border-radius: 8rpx;
-  padding: 6rpx 12rpx;
-}
-
-.score-value {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #f57c00;
-}
-
-.score-label {
-  font-size: 20rpx;
-  color: #f57c00;
-  margin-left: 4rpx;
-}
-
-.card-info {
-  margin-bottom: 12rpx;
-}
-
-.card-address {
-  font-size: 24rpx;
-  color: #666666;
-  display: block;
-  margin-bottom: 10rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8rpx;
-}
-
-.tag {
-  font-size: 22rpx;
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
-}
-
-.distance-tag {
-  background: #e8f0fe;
-  color: #4a90d9;
-}
-
-.category-tag {
-  background: #f0f0f0;
-  color: #666666;
-}
-
-.card-distances {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-  padding-top: 12rpx;
-  border-top: 1rpx solid #f0f0f0;
-}
-
-.distance-item {
-  font-size: 22rpx;
-  color: #999999;
-}
-</style>

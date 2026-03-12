@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "去哪儿聚"
+				"navigationBarTitleText": "不远不近"
 			}
 		},
 		{
@@ -21,7 +21,7 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "去哪儿聚",
+		"navigationBarTitleText": "不远不近",
 		"navigationBarBackgroundColor": "#4A90D9",
 		"backgroundColor": "#F5F6FA"
 	}

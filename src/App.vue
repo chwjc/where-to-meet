@@ -10,4 +10,13 @@ onHide(() => {
   console.log("App Hide");
 });
 </script>
-<style></style>
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 微信小程序按钮默认边框重置 */
+button::after {
+  border: none;
+}
+</style>

@@ -1,56 +1,56 @@
 <template>
-  <view class="location-input">
-    <view class="section-title">
-      <text class="title-text">参与人位置</text>
-      <text class="title-hint">至少添加 2 个位置</text>
+  <view class="bg-white rounded-[16rpx] p-[24rpx] mb-[24rpx]">
+    <view class="flex justify-between items-center mb-[20rpx]">
+      <text class="text-[32rpx] font-semibold text-[#333]">参与人位置</text>
+      <text class="text-[24rpx] text-[#999]">至少添加 2 个位置</text>
     </view>
 
     <!-- 已添加的位置列表 -->
-    <view class="location-list">
+    <view class="mb-[16rpx]">
       <view
         v-for="(loc, index) in locations"
         :key="index"
-        class="location-item"
+        class="flex items-center justify-between px-[20rpx] py-[16rpx] bg-page-bg rounded-[12rpx] mb-[12rpx]"
       >
-        <view class="location-info">
-          <text class="location-icon">📍</text>
-          <view class="location-text">
-            <text class="location-name">{{ loc.name }}</text>
-            <text v-if="loc.address" class="location-address">{{ loc.address }}</text>
+        <view class="flex items-center flex-1 overflow-hidden">
+          <text class="text-[28rpx] mr-[12rpx]">📍</text>
+          <view class="flex flex-col overflow-hidden">
+            <text class="text-[28rpx] text-[#333] truncate">{{ loc.name }}</text>
+            <text v-if="loc.address" class="text-[22rpx] text-[#999] mt-[4rpx] truncate">{{ loc.address }}</text>
           </view>
         </view>
-        <text class="remove-btn" @tap="removeLocation(index)">✕</text>
+        <text class="text-[28rpx] text-[#cc4444] px-[16rpx] py-[8rpx] shrink-0" @tap="removeLocation(index)">✕</text>
       </view>
     </view>
 
     <!-- 搜索输入 -->
-    <view class="search-box">
+    <view class="flex items-center bg-page-bg rounded-[12rpx] pl-[20rpx] pr-[8rpx] py-[4rpx]">
       <input
-        class="search-input"
+        class="flex-1 h-[72rpx] text-[28rpx] text-[#333]"
         v-model="searchText"
         placeholder="搜索地址添加位置"
         confirm-type="search"
         @input="onSearchInput"
         @confirm="onSearchConfirm"
       />
-      <view class="search-actions">
-        <view class="locate-btn" @tap="getCurrentLocation">
-          <text class="locate-icon">⊙</text>
-          <text class="locate-text">定位</text>
+      <view class="shrink-0">
+        <view class="flex items-center bg-primary rounded-[8rpx] px-[20rpx] py-[12rpx]" @tap="getCurrentLocation">
+          <text class="text-[28rpx] text-white mr-[4rpx]">⊙</text>
+          <text class="text-[24rpx] text-white">定位</text>
         </view>
       </view>
     </view>
 
     <!-- 搜索建议列表 -->
-    <view v-if="suggestions.length > 0" class="suggestion-list">
+    <view v-if="suggestions.length > 0" class="mt-[12rpx] bg-white border border-[#eee] rounded-[12rpx] max-h-[400rpx] overflow-y-auto">
       <view
         v-for="(item, idx) in suggestions"
         :key="idx"
-        class="suggestion-item"
+        class="px-[20rpx] py-[16rpx] border-b border-[#f0f0f0] last:border-b-0"
         @tap="selectSuggestion(item)"
       >
-        <text class="suggestion-name">{{ item.title }}</text>
-        <text class="suggestion-address">{{ item.address }}</text>
+        <text class="text-[28rpx] text-[#333] block">{{ item.title }}</text>
+        <text class="text-[22rpx] text-[#999] mt-[4rpx] block">{{ item.address }}</text>
       </view>
     </view>
   </view>
@@ -146,155 +146,3 @@ async function getCurrentLocation() {
   }
 }
 </script>
-
-<style scoped>
-.location-input {
-  background: #ffffff;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  margin-bottom: 24rpx;
-}
-
-.section-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
-}
-
-.title-text {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333333;
-}
-
-.title-hint {
-  font-size: 24rpx;
-  color: #999999;
-}
-
-.location-list {
-  margin-bottom: 16rpx;
-}
-
-.location-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16rpx 20rpx;
-  background: #f5f6fa;
-  border-radius: 12rpx;
-  margin-bottom: 12rpx;
-}
-
-.location-info {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  overflow: hidden;
-}
-
-.location-icon {
-  font-size: 28rpx;
-  margin-right: 12rpx;
-}
-
-.location-text {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.location-name {
-  font-size: 28rpx;
-  color: #333333;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.location-address {
-  font-size: 22rpx;
-  color: #999999;
-  margin-top: 4rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.remove-btn {
-  font-size: 28rpx;
-  color: #cc4444;
-  padding: 8rpx 16rpx;
-  flex-shrink: 0;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background: #f5f6fa;
-  border-radius: 12rpx;
-  padding: 4rpx 8rpx 4rpx 20rpx;
-}
-
-.search-input {
-  flex: 1;
-  height: 72rpx;
-  font-size: 28rpx;
-  color: #333333;
-}
-
-.search-actions {
-  flex-shrink: 0;
-}
-
-.locate-btn {
-  display: flex;
-  align-items: center;
-  background: #4a90d9;
-  border-radius: 8rpx;
-  padding: 12rpx 20rpx;
-}
-
-.locate-icon {
-  font-size: 28rpx;
-  color: #ffffff;
-  margin-right: 4rpx;
-}
-
-.locate-text {
-  font-size: 24rpx;
-  color: #ffffff;
-}
-
-.suggestion-list {
-  margin-top: 12rpx;
-  background: #ffffff;
-  border: 1rpx solid #eeeeee;
-  border-radius: 12rpx;
-  max-height: 400rpx;
-  overflow-y: auto;
-}
-
-.suggestion-item {
-  padding: 16rpx 20rpx;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.suggestion-item:last-child {
-  border-bottom: none;
-}
-
-.suggestion-name {
-  font-size: 28rpx;
-  color: #333333;
-  display: block;
-}
-
-.suggestion-address {
-  font-size: 22rpx;
-  color: #999999;
-  margin-top: 4rpx;
-  display: block;
-}
-</style>
