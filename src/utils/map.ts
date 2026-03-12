@@ -1,8 +1,7 @@
 import type { Location, Place } from './types'
 
-// 腾讯地图 WebService API Key
-// TODO: 替换为你自己的 Key，申请地址：https://lbs.qq.com
-const MAP_KEY = 'MUJBZ-VBBLL-H7HP7-MBZAW-5KP3O-K5BL4'
+// 腾讯地图 WebService API Key，通过 .env 文件中的 VITE_MAP_KEY 注入
+const MAP_KEY = import.meta.env.VITE_MAP_KEY || ''
 
 /** 根据腾讯地图 API status 返回友好错误文案 */
 function getApiErrorMessage(status: number, fallback: string): string {

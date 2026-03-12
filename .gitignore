@@ -11,9 +11,11 @@ node_modules
 .DS_Store
 dist
 *.local
+.env
 llmdoc.md
 claude.md
 prd.md
+src/manifest.json
 
 # Editor directories and files
 .idea

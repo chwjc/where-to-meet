@@ -52,12 +52,22 @@ cd where-to-meet
 npm install
 ```
 
-### 配置 API Key
+### 配置
 
-打开 `src/utils/map.ts`，将 `MAP_KEY` 替换为你自己的腾讯地图 Key：
+1. **小程序 AppID**：复制 `src/manifest.json.example` 为 `src/manifest.json`，将 `appid` 替换为你自己的小程序 AppID：
 
-```typescript
-const MAP_KEY = '你的腾讯地图WebServiceAPI Key'
+```bash
+cp src/manifest.json.example src/manifest.json
+```
+
+2. **腾讯地图 API Key**：复制 `.env.example` 为 `.env`，填入你的腾讯地图 Key：
+
+```bash
+cp .env.example .env
+```
+
+```env
+VITE_MAP_KEY=你的腾讯地图WebServiceAPI Key
 ```
 
 > 申请地址：https://lbs.qq.com → 控制台 → 创建 Key → 勾选 **WebServiceAPI**
