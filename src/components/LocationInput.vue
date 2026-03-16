@@ -28,7 +28,7 @@
       <input
         class="flex-1 h-[72rpx] text-[28rpx] text-[#333]"
         v-model="searchText"
-        placeholder="搜索地址添加位置"
+        :placeholder="searching ? '搜索中...' : '搜索地址添加位置'"
         confirm-type="search"
         @input="onSearchInput"
         @confirm="onSearchConfirm"
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import type { Location } from '../utils/types'
 import { searchSuggestion } from '../utils/map'
 import { reverseGeocode } from '../utils/map'
@@ -69,6 +69,7 @@ const emit = defineEmits<{
 const locations = ref<Location[]>([])
 const searchText = ref('')
 const suggestions = ref<any[]>([])
+const searching = ref(false)
 
 let searchTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -81,10 +82,18 @@ function onSearchInput() {
   }
   // 防抖 300ms
   searchTimer = setTimeout(async () => {
+    searching.value = true
     try {
-      suggestions.value = await searchSuggestion(keyword)
-    } catch {
+      const result = await searchSuggestion(keyword)
+      suggestions.value = result
+      if (result.length === 0) {
+        uni.showToast({ title: '未找到相关地址', icon: 'none' })
+      }
+    } catch (err: any) {
       suggestions.value = []
+      uni.showToast({ title: err.message || '搜索失败', icon: 'none' })
+    } finally {
+      searching.value = false
     }
   }, 300)
 }

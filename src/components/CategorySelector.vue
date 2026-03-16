@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import type { Category } from '../utils/types'
 import { categories } from '../utils/categories'
 

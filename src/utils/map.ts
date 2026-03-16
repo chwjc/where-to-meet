@@ -20,16 +20,19 @@ function getApiErrorMessage(status: number, fallback: string): string {
 }
 
 /** 腾讯地图搜索提示 API —— 用于地址搜索输入联想 */
-export function searchSuggestion(keyword: string, region = '北京'): Promise<any[]> {
+export function searchSuggestion(keyword: string, region?: string): Promise<any[]> {
+  const data: Record<string, string> = {
+    keyword,
+    key: MAP_KEY,
+    output: 'json',
+  }
+  if (region) {
+    data.region = region
+  }
   return new Promise((resolve, reject) => {
     uni.request({
       url: 'https://apis.map.qq.com/ws/place/v1/suggestion',
-      data: {
-        keyword,
-        region,
-        key: MAP_KEY,
-        output: 'json',
-      },
+      data,
       success: (res: any) => {
         if (res.data && res.data.status === 0) {
           resolve(res.data.data || [])
@@ -52,7 +55,7 @@ export function searchNearbyPOI(
   lng: number,
   keyword: string,
   radius: number,
-  pageSize = 20,
+  pageSize = 40,
   pageIndex = 1
 ): Promise<any[]> {
   return new Promise((resolve, reject) => {

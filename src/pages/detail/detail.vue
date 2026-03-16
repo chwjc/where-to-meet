@@ -1,60 +1,68 @@
 <template>
-  <view class="min-h-screen bg-page-bg">
-    <view v-if="place">
-      <!-- 地图 -->
-      <map
-        class="w-full h-[400rpx]"
-        :latitude="place.lat"
-        :longitude="place.lng"
-        :markers="markers"
-        :scale="14"
-        :show-location="true"
-      />
+  <view class="h-screen flex flex-col bg-page-bg">
+    <view v-if="place" class="flex-1 flex flex-col overflow-hidden">
+      <scroll-view scroll-y class="flex-1">
+        <!-- 地图 -->
+        <map
+          class="w-full h-[400rpx]"
+          :latitude="place.lat"
+          :longitude="place.lng"
+          :markers="markers"
+          :scale="14"
+          :show-location="true"
+        />
 
-      <!-- 地点信息 -->
-      <view class="bg-white mx-[24rpx] my-[24rpx] rounded-[16rpx] p-[28rpx]">
-        <text class="text-[36rpx] font-bold text-[#333] block mb-[8rpx]">{{ place.title }}</text>
-        <text class="text-[26rpx] text-[#666] block mb-[20rpx]">{{ place.address }}</text>
+        <!-- 地点信息 -->
+        <view class="bg-white mx-[24rpx] my-[24rpx] rounded-[16rpx] p-[28rpx]">
+          <text class="text-[36rpx] font-bold text-[#333] block mb-[8rpx]">{{ place.title }}</text>
+          <text class="text-[26rpx] text-[#666] block mb-[20rpx]">{{ place.address }}</text>
 
-        <view v-if="place.category" class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
-          <text class="text-[26rpx] text-[#999]">分类</text>
-          <text class="text-[26rpx] text-[#333]">{{ place.category }}</text>
-        </view>
+          <view v-if="place.category" class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
+            <text class="text-[26rpx] text-[#999]">分类</text>
+            <text class="text-[26rpx] text-[#333]">{{ place.category }}</text>
+          </view>
 
-        <view v-if="place.tel" class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
-          <text class="text-[26rpx] text-[#999]">电话</text>
-          <text class="text-[26rpx] text-primary" @tap="callPhone">{{ place.tel }}</text>
-        </view>
+          <view v-if="place.tel" class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
+            <text class="text-[26rpx] text-[#999]">电话</text>
+            <text class="text-[26rpx] text-primary" @tap="callPhone">{{ place.tel }}</text>
+          </view>
 
-        <view class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
-          <text class="text-[26rpx] text-[#999]">综合评分</text>
-          <text class="text-[26rpx] text-accent font-semibold">{{ (place.score * 10).toFixed(1) }} 分</text>
-        </view>
+          <view class="flex justify-between items-center py-[12rpx] border-b border-[#f5f5f5]">
+            <text class="text-[26rpx] text-[#999]">综合推荐分</text>
+            <text class="text-[26rpx] text-accent font-semibold">{{ (place.score * 10).toFixed(1) }} 分</text>
+          </view>
 
-        <!-- 各人距离 -->
-        <view class="mt-[20rpx]">
-          <text class="text-[26rpx] text-[#999]">各人距离</text>
-          <view class="mt-[12rpx]">
-            <view
-              v-for="(d, i) in place.distances"
-              :key="i"
-              class="flex items-center mb-[12rpx]"
-            >
-              <text class="text-[24rpx] text-[#666] w-[60rpx] shrink-0">人{{ i + 1 }}</text>
-              <view class="flex-1 h-[16rpx] bg-[#f0f0f0] rounded-[8rpx] mx-[16rpx] overflow-hidden">
-                <view
-                  class="h-full bg-primary rounded-[8rpx] min-w-[8rpx]"
-                  :style="{ width: getBarWidth(d) + '%' }"
-                />
+          <!-- 各人距离 -->
+          <view class="mt-[20rpx]">
+            <text class="text-[26rpx] text-[#999]">各人距离</text>
+            <view class="mt-[12rpx]">
+              <view
+                v-for="(d, i) in place.distances"
+                :key="i"
+                class="mb-[16rpx]"
+              >
+                <view class="flex items-center justify-between mb-[8rpx]">
+                  <text class="text-[24rpx] text-[#666] flex-1 truncate mr-[16rpx]">{{ userLocations[i]?.name || '人' + (i + 1) }}</text>
+                  <text class="text-[24rpx] text-[#333] shrink-0">{{ formatDistance(d) }}</text>
+                </view>
+                <view class="h-[16rpx] bg-[#f0f0f0] rounded-[8rpx] overflow-hidden">
+                  <view
+                    class="h-full bg-primary rounded-[8rpx] min-w-[8rpx]"
+                    :style="{ width: getBarWidth(d) + '%' }"
+                  />
+                </view>
               </view>
-              <text class="text-[24rpx] text-[#333] w-[100rpx] text-right shrink-0">{{ formatDistance(d) }}</text>
             </view>
           </view>
         </view>
-      </view>
+      </scroll-view>
 
       <!-- 操作按钮 -->
-      <view class="px-[24rpx] pb-[48rpx]">
+      <view class="bg-white border-t border-[#f0f0f0] px-[24rpx] pt-[16rpx] pb-[32rpx] flex flex-col gap-[16rpx]">
+        <button
+          class="w-full h-[88rpx] bg-[#FF6633] text-white text-[32rpx] font-semibold rounded-[16rpx] flex items-center justify-center border-none"
+          @tap="openDianping"
+        >去大众点评查看评价</button>
         <button
           class="w-full h-[88rpx] bg-primary text-white text-[32rpx] font-semibold rounded-[16rpx] flex items-center justify-center border-none"
           @tap="openNavigation"
@@ -161,5 +169,32 @@ function callPhone() {
   uni.makePhoneCall({
     phoneNumber: place.value.tel,
   })
+}
+
+function openDianping() {
+  if (!place.value) return
+  // #ifdef MP-WEIXIN
+  wx.navigateToMiniProgram({
+    appId: 'wx23d3eab1986feabb',
+    path: `pages/search/search?keyword=${encodeURIComponent(place.value.title)}`,
+    fail: () => {
+      // 跳转失败时复制店名方便用户自行搜索
+      uni.setClipboardData({
+        data: place.value!.title,
+        success: () => {
+          uni.showToast({ title: '店名已复制，请到大众点评搜索', icon: 'none', duration: 2000 })
+        },
+      })
+    },
+  })
+  // #endif
+  // #ifndef MP-WEIXIN
+  uni.setClipboardData({
+    data: place.value.title,
+    success: () => {
+      uni.showToast({ title: '店名已复制，请到大众点评搜索', icon: 'none', duration: 2000 })
+    },
+  })
+  // #endif
 }
 </script>

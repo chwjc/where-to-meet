@@ -42,9 +42,9 @@ function scorePlaces(places: Place[]): Place[] {
 /** 获取推荐地点 */
 export async function getRecommendations(
   params: RecommendParams,
-  topN = 8
+  topN = 20
 ): Promise<Place[]> {
-  const { locations, keyword } = params
+  const { locations, keyword, radius: userRadius } = params
 
   if (locations.length === 0) {
     return []
@@ -53,9 +53,9 @@ export async function getRecommendations(
   // 1. 计算汇合中心
   const center = getCenter(locations)
 
-  // 2. 确定搜索半径
+  // 2. 确定搜索半径（优先用户设定，否则自动计算）
   const maxSpan = getMaxSpan(locations)
-  const radius = getSearchRadius(maxSpan)
+  const radius = userRadius || getSearchRadius(maxSpan)
 
   // 3. 搜索 POI
   const pois = await searchNearbyPOI(center.lat, center.lng, keyword, radius)

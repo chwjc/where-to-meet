@@ -24,24 +24,26 @@
     </view>
 
     <!-- 各人距离详情 -->
-    <view v-if="place.distances.length > 0" class="flex flex-wrap gap-[16rpx] pt-[12rpx] border-t border-[#f0f0f0]">
-      <text
+    <view v-if="place.distances.length > 0" class="flex flex-wrap gap-x-[24rpx] gap-y-[8rpx] pt-[12rpx] border-t border-[#f0f0f0]">
+      <view
         v-for="(d, i) in place.distances"
         :key="i"
-        class="text-[22rpx] text-[#999]"
+        class="flex items-center"
       >
-        人{{ i + 1 }}：{{ formatDistance(d) }}
-      </text>
+        <text class="text-[22rpx] text-[#999] max-w-[160rpx] truncate">{{ userLocations?.[i]?.name || '人' + (i + 1) }}</text>
+        <text class="text-[22rpx] text-[#999]">：{{ formatDistance(d) }}</text>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import type { Place } from '../utils/types'
+import type { Place, Location } from '../utils/types'
 
 defineProps<{
   place: Place
   rank: number
+  userLocations?: Location[]
 }>()
 
 defineEmits<{

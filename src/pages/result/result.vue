@@ -9,6 +9,7 @@
         :key="place.id || index"
         :place="place"
         :rank="index + 1"
+        :user-locations="userLocations"
         @tap="goDetail(index)"
       />
     </view>
@@ -23,16 +24,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import type { Place } from '../../utils/types'
+import type { Place, Location } from '../../utils/types'
 import PlaceCard from '../../components/PlaceCard.vue'
 
 const places = ref<Place[]>([])
+const userLocations = ref<Location[]>([])
 
 onLoad(() => {
   try {
     const data = uni.getStorageSync('recommend_results')
     if (data) {
       places.value = JSON.parse(data)
+    }
+    const locData = uni.getStorageSync('recommend_locations')
+    if (locData) {
+      userLocations.value = JSON.parse(locData)
     }
   } catch {
     places.value = []

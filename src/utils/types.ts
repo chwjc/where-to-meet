@@ -56,4 +56,6 @@ export interface RecommendParams {
   locations: Location[]
   /** 选择的活动类型关键词 */
   keyword: string
+  /** 用户手动设定的搜索半径（米），不传则自动计算 */
+  radius?: number
 }

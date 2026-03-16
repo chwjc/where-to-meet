@@ -72,6 +72,14 @@ VITE_MAP_KEY=你的腾讯地图WebServiceAPI Key
 
 > 申请地址：https://lbs.qq.com → 控制台 → 创建 Key → 勾选 **WebServiceAPI**
 
+3. **配置服务器域名**：登录 [微信公众平台](https://mp.weixin.qq.com) → 开发管理 → 开发设置 → 服务器域名，在 **request 合法域名** 中添加：
+
+```
+https://apis.map.qq.com
+```
+
+> 不配置此域名，体验版和正式版的网络请求会被微信拦截（开发者调试模式下不受影响）
+
 ### 开发
 
 ```bash
